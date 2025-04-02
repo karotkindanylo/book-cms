@@ -1,0 +1,174 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Book {
+  id: ID!
+  title: String!
+  author: String!
+  publicationDate: DateTime
+  publisher: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Review {
+  book_id: String!
+  review_id: String!
+  user_id: String!
+  rating: Int!
+  comment: String!
+  timestamp: String!
+}
+
+type PaginatedReviews {
+  items: [Review!]!
+  count: Int!
+  nextToken: String
+}
+
+type BookReviewStats {
+  averageRating: Float!
+  totalReviews: Int!
+}
+
+type PaginatedBookResult {
+  items: [Book!]!
+  total: Int!
+  page: Int!
+  limit: Int!
+  totalPages: Int!
+}
+
+type BookWithReviews {
+  id: ID!
+  title: String!
+  author: String!
+  publicationDate: DateTime
+  publisher: String!
+  items: [Review!]
+  count: Float
+  nextToken: String
+}
+
+type AuthorCount {
+  author: String!
+  count: Int!
+}
+
+type YearCount {
+  year: Int!
+  count: Int!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+}
+
+type AuthResponse {
+  access_token: String!
+  user_id: String!
+  name: String!
+  email: String!
+}
+
+type ActivityLog {
+  id: String!
+  user_id: String!
+  timestamp: String!
+  action: String!
+  details: String!
+}
+
+type PaginatedActivityLogs {
+  items: [ActivityLog!]!
+  count: Int!
+  nextToken: String
+}
+
+type Query {
+  book(id: String!): BookWithReviews!
+  searchBooks(params: BookSearchParams!): PaginatedBookResult!
+  me: User!
+  myActivityLogs(params: ActivityLogParams): PaginatedActivityLogs!
+  recentActivityLogs(params: ActivityLogParams): PaginatedActivityLogs!
+  activityLogsByAction(action: String!, params: ActivityLogParams): PaginatedActivityLogs!
+  getBookReviews(bookId: String!, params: ReviewPaginationParams): PaginatedReviews!
+  getMyReviews(params: ReviewPaginationParams): PaginatedReviews!
+  getBookReviewStats(bookId: String!): BookReviewStats!
+}
+
+input BookSearchParams {
+  page: Int = 1
+  limit: Int = 10
+  sortBy: String = "id"
+  sortOrder: String = "ASC"
+  title: String
+  author: String
+  fromDate: String
+  toDate: String
+}
+
+input ActivityLogParams {
+  limit: Int
+  nextToken: String
+}
+
+input ReviewPaginationParams {
+  limit: Int
+  nextToken: String
+}
+
+type Mutation {
+  createBook(input: CreateBookDto!): Book!
+  updateBook(id: String!, input: UpdateBookDto!): Book!
+  deleteBook(id: String!): Boolean!
+  login(input: LoginInput!): AuthResponse!
+  register(input: RegisterInput!): AuthResponse!
+  createReview(input: CreateReviewInput!): Review!
+  updateReview(reviewId: String!, input: UpdateReviewInput!): Review!
+  deleteReview(bookId: String!, reviewId: String!): Boolean!
+}
+
+input CreateBookDto {
+  title: String!
+  author: String!
+  isbn: String
+  description: String
+}
+
+input UpdateBookDto {
+  title: String
+  author: String
+  publicationDate: DateTime
+  isbn: String
+  description: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+  name: String!
+}
+
+input CreateReviewInput {
+  book_id: String!
+  rating: Int!
+  comment: String!
+}
+
+input UpdateReviewInput {
+  book_id: String!
+  rating: Int
+  comment: String
+}
